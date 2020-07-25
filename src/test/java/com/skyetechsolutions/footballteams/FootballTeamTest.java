@@ -11,16 +11,14 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FootballTeamTest {
-    private String name="Arsenal";
-    private String city="London";
-    private String owner="Martin Golding";
-    private int stadiumCapacity=70000;
-    private String competition="Premier League";
-    private int numberOfPlayers=20;
-    private String dateOfCreation="30/12/1976";
+    private final String name="Arsenal";
+    private final String city="London";
+    private final String owner="Martin Golding";
+    private final int stadiumCapacity=70000;
+    private final String competition="Premier League";
+    private final int numberOfPlayers=20;
+    private final String dateOfCreation="30/12/1976";
     private FootballTeam testTeam;
-    private DateFormat dateFormatter;
-    private String dateTemplate = "dd/MM/yyyy";
 
     @BeforeEach
     void createTeam() throws ParseException {
@@ -66,7 +64,8 @@ class FootballTeamTest {
 
     @Test
     void getDateOfCreation() {
-        dateFormatter = new SimpleDateFormat(dateTemplate);
+        String dateTemplate = "dd/MM/yyyy";
+        DateFormat dateFormatter = new SimpleDateFormat(dateTemplate);
         try {
             Date testDate = dateFormatter.parse(dateOfCreation);
             assertEquals(0, testDate.compareTo(testTeam.getDateOfCreation()));
