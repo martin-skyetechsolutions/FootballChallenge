@@ -1,5 +1,7 @@
 package com.skyetechsolutions.footballteams;
 
+import org.springframework.context.annotation.Configuration;
+
 import java.util.TreeSet;
 
 public class FootballTeamTreeSet<E> extends TreeSet<E> {
