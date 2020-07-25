@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +17,6 @@ class FootballTeamDataArrayTest {
     private int numberOfPlayers=20;
     private String dateOfCreation="30/12/1976";
     private FootballTeam testTeam;
-    private DateFormat dateFormatter;
     private String dateTemplate = "dd/MM/yyyy";
 
     @Test
@@ -31,7 +31,7 @@ class FootballTeamDataArrayTest {
         testFootballTeamDataArray.footballTeams.clear();
         assertEquals(0, testFootballTeamDataArray.footballTeams.size());
         try {
-            FootballTeam newTestTeam = new FootballTeam("Everton","Liverpool","Our Kid",50000,"Premier League",18,"25/12/1900");
+            FootballTeam newTestTeam = new FootballTeam("Everton","Liverpool","Our Kid",50000,"Premier League",18,new SimpleDateFormat(dateTemplate).parse("25/12/1900"));
             testFootballTeamDataArray.footballTeams.add(newTestTeam);
         } catch (ParseException e) {
             e.printStackTrace();

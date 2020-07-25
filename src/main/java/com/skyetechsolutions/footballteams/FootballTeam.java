@@ -18,21 +18,16 @@ public class FootballTeam implements Comparable<FootballTeam>{
     private DateFormat dateFormatter;
     private String dateTemplate = "dd/MM/yyyy";
 
-    public FootballTeam(String name, String city, String owner, int stadiumCapacity, String competition, int numberOfPlayers, String dateOfCreation) throws ParseException {
-       try {
-           this.name = name;
+    public FootballTeam(String name, String city, String owner, int stadiumCapacity, String competition, int numberOfPlayers, Date dateOfCreation) throws ParseException {
+        this.name = name;
 
-           this.city = city;
-           this.owner = owner;
-           this.stadiumCapacity = stadiumCapacity;
-           this.competition = competition;
-           this.numberOfPlayers = numberOfPlayers;
-           this.dateFormatter = new SimpleDateFormat(dateTemplate);
-           this.dateOfCreation = this.dateFormatter.parse(dateOfCreation);
-       }
-       catch(ParseException e){
-           System.out.println("date did not parse");
-       }
+        this.city = city;
+        this.owner = owner;
+        this.stadiumCapacity = stadiumCapacity;
+        this.competition = competition;
+        this.numberOfPlayers = numberOfPlayers;
+        this.dateFormatter = new SimpleDateFormat(dateTemplate);
+        this.dateOfCreation = dateOfCreation;
     }
 
     public int compareTo(FootballTeam o){
@@ -76,7 +71,7 @@ public class FootballTeam implements Comparable<FootballTeam>{
                 ", stadiumCapacity=" + stadiumCapacity +
                 ", competition='" + competition + '\'' +
                 ", numberOfPlayers=" + numberOfPlayers +
-                ", dateOfCreation=" + dateFormatter.format(dateOfCreation) +
+                ", dateOfCreation=" + dateOfCreation +
                 '}';
     }
 }

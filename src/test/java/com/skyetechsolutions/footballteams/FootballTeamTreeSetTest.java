@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,10 +17,12 @@ class FootballTeamTreeSetTest {
     private int stadiumCapacity=70000;
     private String competition="Premier League";
     private int numberOfPlayers=20;
-    private String dateOfCreation="30/12/1976";
-    private FootballTeam testTeam;
-    private DateFormat dateFormatter;
     private String dateTemplate = "dd/MM/yyyy";
+    private Date dateOfCreation= new SimpleDateFormat(dateTemplate).parse("30/12/1976");
+    private FootballTeam testTeam;
+
+    FootballTeamTreeSetTest() throws ParseException {
+    }
 
     @BeforeEach
     void createTeam() throws ParseException {

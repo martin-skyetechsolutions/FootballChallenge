@@ -1,30 +1,24 @@
 package com.skyetechsolutions.footballteams;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.equalToObject;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import com.skyetechsolutions.footballteams.FootballTeam;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.util.Objects;
 
 //@EnableWebMvc
 @SpringBootTest
@@ -37,12 +31,15 @@ public class WebControllerTest {
 	private  int stadiumCapacity=70000;
 	private  String competition="Premier League";
 	private  int numberOfPlayers=20;
-	private  String dateOfCreation="30/12/1976";
+	private Date dateOfCreation= new SimpleDateFormat("dd/MM/yyy").parse("30/12/1976");
 	private FootballTeam testTeam;
 
 
 	@Autowired
 	private MockMvc mvc;
+
+	public WebControllerTest() throws ParseException {
+	}
 
 	@Test
 	public void getHello() throws Exception {
@@ -50,30 +47,6 @@ public class WebControllerTest {
 			.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(equalTo("Greetings from SkyeTech Solutions!")));
-	}
-
-	@Test
-	public void postFootballTeamTest() throws Exception {
-
-		FootballTeam testData = new FootballTeam(
-				name,
-				city,
-				owner,
-				stadiumCapacity,
-				competition,
-				numberOfPlayers,
-				dateOfCreation);
-
-		ObjectMapper Mapper = new ObjectMapper();
-		System.out.println("testData:\n" + Mapper.writeValueAsString(testData));
-
-		mvc.perform(post("/footballTeamTest")
-				.accept(MediaType.APPLICATION_JSON)
-				.content(Mapper.writeValueAsString(testData)))
-				.andExpect(status().isOk())
-				.andExpect(content()
-						.contentType("application/json"))
-		;
 	}
 
 	@Test
@@ -88,14 +61,16 @@ public class WebControllerTest {
 				dateOfCreation);
 
 		ObjectMapper Mapper = new ObjectMapper();
-		System.out.println("testData:\n" + Mapper.writeValueAsString(testData));
+		String testString = Mapper.writeValueAsString(testData);
+		System.out.println("testData:\n" + testString);
 
-		mvc.perform(post("/footballTeam")
-			.content(Mapper.writeValueAsString(testData)))
-			.andExpect(status().isOk())
-				/*.andExpect(content()
-						.contentType("application/json;charset=UTF-8"))
-				.andExpect(content().string(equalToObject(testData )))*/
+		this.mvc.perform(post("/footballTeam")
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(testString))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(content().string(equalTo(Mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(testData))))
 		 ;
 	}
 
@@ -112,8 +87,7 @@ public class WebControllerTest {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(content().string(equalTo(Mapper.writeValueAsString(peeps))))
-		;
+				.andExpect(content().string(equalTo(Mapper.writeValueAsString(peeps))));
 	}
 
 }

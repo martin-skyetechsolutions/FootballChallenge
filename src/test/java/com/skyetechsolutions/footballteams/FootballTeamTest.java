@@ -17,8 +17,11 @@ class FootballTeamTest {
     private final int stadiumCapacity=70000;
     private final String competition="Premier League";
     private final int numberOfPlayers=20;
-    private final String dateOfCreation="30/12/1976";
+    private final Date dateOfCreation= new SimpleDateFormat("dd/MM/yyy").parse("30/12/1976");
     private FootballTeam testTeam;
+
+    FootballTeamTest() throws ParseException {
+    }
 
     @BeforeEach
     void createTeam() throws ParseException {
@@ -64,14 +67,8 @@ class FootballTeamTest {
 
     @Test
     void getDateOfCreation() {
-        String dateTemplate = "dd/MM/yyyy";
-        DateFormat dateFormatter = new SimpleDateFormat(dateTemplate);
-        try {
-            Date testDate = dateFormatter.parse(dateOfCreation);
-            assertEquals(0, testDate.compareTo(testTeam.getDateOfCreation()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            assertEquals(0, dateOfCreation.compareTo(testTeam.getDateOfCreation()));
+
     }
 
     @Test
