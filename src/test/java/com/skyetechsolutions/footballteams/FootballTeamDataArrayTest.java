@@ -29,13 +29,14 @@ class FootballTeamDataArrayTest {
     void addTeam(){
         FootballTeamDataArray testFootballTeamDataArray = FootballTeamDataArray.getInstance();
         testFootballTeamDataArray.footballTeams.clear();
-        assertEquals(0,testFootballTeamDataArray.footballTeams.size());
+        assertEquals(0, testFootballTeamDataArray.footballTeams.size());
         try {
-            FootballTeam testTeam = new FootballTeam("Everton","Liverpool","Our Kid",50000,"Premier League",18,"25/12/1900");
+            FootballTeam newTestTeam = new FootballTeam("Everton","Liverpool","Our Kid",50000,"Premier League",18,"25/12/1900");
+            testFootballTeamDataArray.footballTeams.add(newTestTeam);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-       // assertEquals(1,testTeamArray.footballTeams.size());
+        assertEquals(1,testFootballTeamDataArray.footballTeams.size());
     }
 
 

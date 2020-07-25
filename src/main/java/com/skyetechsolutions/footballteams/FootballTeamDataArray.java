@@ -4,10 +4,11 @@ import java.util.TreeSet;
 
 //Singleton pattern;
 public class FootballTeamDataArray {
-    private static FootballTeamDataArray INSTANCE;
-    public TreeSet<FootballTeam> footballTeams;
+    private static FootballTeamDataArray INSTANCE = null;
+    public TreeSet<FootballTeam> footballTeams = new TreeSet<>();
 
-    private FootballTeamDataArray(){}
+    private FootballTeamDataArray(){
+    }
 
     public static FootballTeamDataArray getInstance(){
         if(INSTANCE == null) {

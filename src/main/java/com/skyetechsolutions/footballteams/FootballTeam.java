@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FootballTeam {
+
+// Need comparable and compareTo override for custom contains and add in TreeSet.
+public class FootballTeam implements Comparable<FootballTeam>{
     private String name;
     private String city;
     private String owner;
@@ -31,6 +33,10 @@ public class FootballTeam {
        catch(ParseException e){
            System.out.println("date did not parse");
        }
+    }
+
+    public int compareTo(FootballTeam o){
+        return this.getName().compareTo(o.getName());
     }
 
     public String getName() {
