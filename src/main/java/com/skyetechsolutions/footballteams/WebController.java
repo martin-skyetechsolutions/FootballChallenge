@@ -17,11 +17,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 public class WebController {
 
+
     private FootballTeamTreeSet<FootballTeam> footballTeams = FootballTeamDataArray.getInstance().footballTeams;
 
     Logger logger = LoggerFactory.getLogger(WebController.class);
 
-    @GetMapping("/")
+    @GetMapping("/health")
+    public String awsHealthCheck() {
+        logger.info("local logger -> GET /health");
+        return "{\"status\":\"up\"}";
+    }
+
+    @GetMapping("/hello")
     public String index() {
         logger.info("local logger -> GET /");
         return "Hello from SkyeTech Solutions!";

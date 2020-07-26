@@ -43,8 +43,15 @@ class WebControllerTest {
     }
 
     @Test
+    void getAwsHealthCheck() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/health")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void getIndex() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/")
+        mvc.perform(MockMvcRequestBuilders.get("/hello")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("Hello from SkyeTech Solutions!")));
