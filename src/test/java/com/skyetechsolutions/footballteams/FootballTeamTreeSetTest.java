@@ -39,7 +39,7 @@ class FootballTeamTreeSetTest {
     }
 
     @BeforeEach
-    void createSetAmdTeam() throws ParseException {
+    void createSetAndTeam() throws ParseException {
         testSet = new FootballTeamTreeSet<>();
         testTeam = createTeam();
     }

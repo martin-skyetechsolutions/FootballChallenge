@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.TreeSet;
 
+import static com.skyetechsolutions.footballteams.FootballTeamTreeSetAccessor.getAllTeams;
+import static com.skyetechsolutions.footballteams.FootballTeamTreeSetAccessor.getAllTeamsSortByCapacity;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -32,11 +35,27 @@ public class WebController {
     }
 
     @GetMapping(path="/footballTeam", consumes = APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public FootballTeam postFootballTeam(@RequestBody String name){
+    public FootballTeam getFootballTeam(@RequestBody String name){
         System.out.println("postbody:\n" + name);
         System.out.println("number of teams: " + footballTeams.size());
        FootballTeam result = FootballTeamTreeSetAccessor.getByName(name);
         System.out.println("team: " + result);
-        return footballTeams.first();
+        return result;
+    }
+
+    @GetMapping(path="/footballTeams", consumes = APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public FootballTeamTreeSet<FootballTeam> getFootballTeams(){
+        System.out.println("number of teams: " + footballTeams.size());
+        FootballTeamTreeSet<FootballTeam> result = getAllTeams();
+        System.out.println("teams: " + result);
+        return result;
+    }
+
+    @GetMapping(path="/footballTeamsSortedByCapacity", consumes = APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ArrayList<FootballTeam> getFootballTeamsSortedByCapacity(){
+        System.out.println("number of teams: " + footballTeams.size());
+        ArrayList<FootballTeam> result = getAllTeamsSortByCapacity();
+        System.out.println("teams: " + result);
+        return result;
     }
 }

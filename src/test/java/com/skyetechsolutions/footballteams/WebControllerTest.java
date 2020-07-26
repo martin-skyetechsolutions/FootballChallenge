@@ -2,7 +2,9 @@ package com.skyetechsolutions.footballteams;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.util.collections.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +14,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
@@ -94,17 +100,61 @@ class WebControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(content().string(equalTo(Mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(testData))))
-        ;
+                .andExpect(content().string(equalTo(Mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(testData))));
 
         mvc.perform(MockMvcRequestBuilders.get("/footballTeam")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(name))
                 .andDo(print())
                 .andExpect(status().isOk())
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-               // .andExpect(content().string(equalTo("Hello from SkyeTech Solutions!")))
-         ;
-
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().string(equalTo(Mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(testData))));
     }
+
+    @Test
+    public void getFootballTeamsSortedByCapacity() throws Exception {
+        FootballTeam testData = new FootballTeam(
+                name,
+                city,
+                owner,
+                stadiumCapacity,
+                competition,
+                numberOfPlayers,
+                dateOfCreation);
+
+        ObjectMapper Mapper = new ObjectMapper();
+        FootballTeamDataArray.getInstance().footballTeams.clear();
+
+        LinkedList<FootballTeam> expected = new LinkedList<>();
+        for(int i=0; i<100; i++) {
+            name = RandomString.generate(10);
+            stadiumCapacity = RandomInt.generate();
+            expected.add( new FootballTeam(name, city, owner, stadiumCapacity, competition, numberOfPlayers, dateOfCreation));
+
+            this.mvc.perform(post("/footballTeam")
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(Mapper.writeValueAsString(expected.getLast())))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(content().string(equalTo(Mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(expected.getLast()))));
+
+        }
+
+        expected = expected.stream()
+                .sorted(Comparator.comparingInt(FootballTeam::getStadiumCapacity)
+                    .reversed()
+                .thenComparing(FootballTeam::getName))
+                .collect(Collectors.toCollection(LinkedList<FootballTeam>::new));
+
+        for(FootballTeam i: expected){
+            System.out.println(i.getStadiumCapacity());
+        }
+
+        mvc.perform(MockMvcRequestBuilders.get("/footballTeamsSortedByCapacity")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().string(equalTo(Mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).writeValueAsString(expected))));
+    }
+
 }
