@@ -10,15 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
-import static com.skyetechsolutions.footballteams.FootballTeamTreeSetAccessor.getAllTeams;
-import static com.skyetechsolutions.footballteams.FootballTeamTreeSetAccessor.getAllTeamsSortByCapacity;
+import static com.skyetechsolutions.footballteams.FootballTeamTreeSetAccessor.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 public class WebController {
-
-
-    private FootballTeamTreeSet<FootballTeam> footballTeams = FootballTeamDataArray.getInstance().footballTeams;
 
     Logger logger = LoggerFactory.getLogger(WebController.class);
 
@@ -34,12 +30,12 @@ public class WebController {
         return "Hello from SkyeTech Solutions!";
     }
 
-    @PostMapping(path="/footballTeam", consumes = APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="/footballTeam", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public FootballTeam postFootballTeam(@RequestBody FootballTeam footballTeam){
-        int numberOfTeams = footballTeams.size();
-        footballTeams.add(footballTeam);
-        String message = "local logger -> POST /footballTeam, body: " + footballTeam + ", number of teams; before: " + numberOfTeams + " after: " + footballTeams.size();
-        if(footballTeams.size() > numberOfTeams){
+        int numberOfTeams = FootballTeamTreeSetAccessor.size();
+        FootballTeamTreeSetAccessor.add(footballTeam);
+        String message = "local logger -> POST /footballTeam, body: " + footballTeam + ", number of teams; before: " + numberOfTeams + " after: " + FootballTeamTreeSetAccessor.size();
+        if(FootballTeamTreeSetAccessor.size() > numberOfTeams){
             logger.info(message);
         }else{
             logger.warn(message + " Team Not added" );

@@ -7,8 +7,18 @@ import java.util.stream.Collectors;
 
 public class FootballTeamTreeSetAccessor {
 
+    private static FootballTeamTreeSet<FootballTeam> dataArraylayer = FootballTeamDataArray.getInstance().footballTeams;
+
+    public static int size(){
+        return  dataArraylayer.size();
+    }
+
+    public static boolean add(FootballTeam input){
+        return dataArraylayer.add(input);
+    }
+
     public static FootballTeam getByName(String name){
-        TreeSet<FootballTeam> result = FootballTeamDataArray.getInstance().footballTeams
+        TreeSet<FootballTeam> result = dataArraylayer
                 .stream()
                 .filter(p -> p.getName().equals(name))
                 .collect(Collectors.toCollection(TreeSet::new));
@@ -17,11 +27,11 @@ public class FootballTeamTreeSetAccessor {
     }
 
     public static FootballTeamTreeSet<FootballTeam> getAllTeams(){
-        return FootballTeamDataArray.getInstance().footballTeams;
+        return dataArraylayer;
     }
 
     public static ArrayList<FootballTeam> getAllTeamsSortByCapacity(){
-        ArrayList<FootballTeam> result = FootballTeamDataArray.getInstance().footballTeams
+        ArrayList<FootballTeam> result = dataArraylayer
                 .stream()
                 .sorted(Comparator.comparingInt(FootballTeam::getStadiumCapacity)
                     .reversed()
